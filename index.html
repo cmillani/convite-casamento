@@ -1,0 +1,163 @@
+<!-- Yes, this was vibe coded, yes, it's not completely safe -->
+<!-- there is no sensitive data and is meant only as a simple way to stop bots/curious people -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<meta name="robots" content="noindex">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convite Especial</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background: #fdfaf6;
+            color: #4a4a4a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #login-container {
+            text-align: center;
+            padding: 2rem;
+            border: 1px solid #e0d8cc;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 {
+            font-weight: normal;
+            color: #8e735b;
+        }
+
+        input {
+            padding: 12px;
+            border: 1px solid #d1c7bc;
+            border-radius: 4px;
+            width: 200px;
+            margin-bottom: 1rem;
+            outline: none;
+        }
+
+        button {
+            padding: 12px 24px;
+            background: #8e735b;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #765f4a;
+        }
+
+        #invite-content {
+            display: none;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .error {
+            color: #b22222;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="login-container">
+        <h1>N & C</h1>
+        <p>Por favor, insira a senha para acessar o convite:</p>
+
+        <form onsubmit="unlock(event)">
+            <input type="password" id="password" placeholder="Senha">
+            <br>
+            <button type="submit">Entrar</button>
+        </form>
+
+        <div id="error-msg" class="error">Senha incorreta. Tente novamente.</div>
+    </div>
+
+    <div id="invite-content"></div>
+
+    <script>
+        // Dados gerados pelo script de criptografia (veja o passo 2)
+        const encryptedData = {
+            ciphertext: "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",
+            iv: "FZvGIsfpm15bKty7",
+            salt: "J9lMr5kDUHRTcsfz5SC/Ow=="
+        };
+
+        async function unlock(e) {
+            if (e) e.preventDefault();
+
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('error-msg');
+
+            try {
+                const decrypted = await decrypt(encryptedData, password);
+
+                // Remove o login e limpa o body
+                document.getElementById('login-container').remove();
+
+                // Reset agressivo do Body para não interferir no convite
+                document.body.style.display = 'block';
+                document.body.style.height = 'auto';
+                document.body.style.width = '100%';
+                document.body.style.margin = '0';
+                document.body.style.textAlign = 'initial'; // Reseta alinhamentos de texto
+
+                const container = document.getElementById('invite-content');
+                container.style.display = 'block';
+                container.innerHTML = decrypted;
+
+            } catch (e) {
+                errorMsg.style.display = 'block';
+            }
+        }
+
+        // --- Core da Web Crypto API ---
+        async function decrypt(data, password) {
+            const encoder = new TextEncoder();
+            const decoder = new TextDecoder();
+
+            // 1. Importa a senha como material de chave
+            const keyMaterial = await crypto.subtle.importKey(
+                "raw", encoder.encode(password), "PBKDF2", false, ["deriveKey"]
+            );
+
+            // 2. Deriva a chave AES real usando o salt
+            const key = await crypto.subtle.deriveKey(
+                { name: "PBKDF2", salt: base64ToArray(data.salt), iterations: 100000, hash: "SHA-256" },
+                keyMaterial,
+                { name: "AES-GCM", length: 256 },
+                false, ["decrypt"]
+            );
+
+            // 3. Descriptografa
+            const decryptedContent = await crypto.subtle.decrypt(
+                { name: "AES-GCM", iv: base64ToArray(data.iv) },
+                key,
+                base64ToArray(data.ciphertext)
+            );
+
+            return decoder.decode(decryptedContent);
+        }
+
+        function base64ToArray(base64) {
+            return Uint8Array.from(atob(base64), c => c.charCodeAt(0));
+        }
+    </script>
+</body>
+
+</html>
